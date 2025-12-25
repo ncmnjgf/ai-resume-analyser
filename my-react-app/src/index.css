@@ -1,68 +1,254 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import "tailwindcss";
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+/* ======================================================
+   BASE / GLOBAL STYLES (OpenAI–LinkedIn Typography)
+   ====================================================== */
+@layer base {
+  html {
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+    line-height: 1.6;
+    letter-spacing: -0.01em;
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
-  a:hover {
-    color: #747bff;
+
+  body {
+    @apply bg-slate-950 text-slate-200;
   }
-  button {
-    background-color: #f9f9f9;
+}
+
+/* ======================================================
+   TYPOGRAPHY SCALE (Exact SaaS Hierarchy)
+   ====================================================== */
+@layer components {
+  /* Headings */
+  .heading-xl {
+    @apply text-4xl sm:text-5xl font-semibold tracking-tight text-white;
   }
+
+  .heading-lg {
+    @apply text-3xl sm:text-4xl font-semibold tracking-tight text-white;
+  }
+
+  .heading-md {
+    @apply text-2xl sm:text-3xl font-medium tracking-tight text-white;
+  }
+
+  .heading-sm {
+    @apply text-xl font-medium tracking-tight text-slate-100;
+  }
+
+  /* Body text */
+  .text-body {
+    @apply text-base text-slate-300 leading-relaxed;
+  }
+
+  .text-body-sm {
+    @apply text-sm text-slate-400 leading-relaxed;
+  }
+
+  .text-muted {
+    @apply text-sm text-slate-500;
+  }
+
+  /* Labels & meta */
+  .label {
+    @apply text-xs uppercase tracking-wide font-medium text-slate-500;
+  }
+}
+
+/* ======================================================
+   MAIN BACKGROUND
+   ====================================================== */
+.bg-main-gradient {
+  @apply bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800;
+}
+
+/* ======================================================
+   CARDS & CONTAINERS
+   ====================================================== */
+.section-card {
+  @apply bg-slate-800/70 rounded-2xl p-6
+  border border-slate-700/50
+  transition-all duration-300
+  hover:border-slate-500/60
+  hover:shadow-lg hover:shadow-black/30;
+}
+
+.file-info-card {
+  @apply bg-slate-800/80 rounded-3xl p-6
+  border border-slate-700/50 backdrop-blur-sm;
+}
+
+.summary-box {
+  @apply bg-slate-700/30 rounded-xl p-4
+  border border-slate-600/30;
+}
+
+/* ======================================================
+   UPLOAD AREA
+   ====================================================== */
+.upload-area {
+  @apply bg-slate-800/70 rounded-2xl p-6 max-w-xl mx-auto
+  border border-slate-600/50 backdrop-blur-sm
+  transition-all duration-300
+  hover:border-sky-500/40
+  hover:shadow-xl hover:shadow-sky-500/10;
+}
+
+.upload-zone {
+  @apply text-center p-6 border-2 border-dashed
+  border-slate-600 rounded-xl text-slate-300;
+}
+
+/* ======================================================
+   BUTTONS (SaaS Style)
+   ====================================================== */
+.btn-primary {
+  @apply px-6 py-3 rounded-lg text-white text-base font-medium
+  bg-gradient-to-r from-sky-500 to-cyan-500
+  transition hover:opacity-90;
+}
+
+.btn-secondary {
+  @apply px-4 py-2 rounded-lg text-slate-300
+  bg-slate-700 border border-slate-600
+  transition hover:bg-slate-600;
+}
+
+/* ======================================================
+   SCORE / STATUS
+   ====================================================== */
+.score-card {
+  @apply bg-slate-800 rounded-2xl p-6
+  border border-slate-700 shadow-md
+  transition hover:shadow-lg;
+}
+
+.score-status-excellent {
+  @apply bg-emerald-500/15 text-emerald-300
+  border border-emerald-500/30 rounded-lg px-3 py-1;
+}
+
+.score-status-good {
+  @apply bg-yellow-500/15 text-yellow-300
+  border border-yellow-500/30 rounded-lg px-3 py-1;
+}
+
+.score-status-improvement {
+  @apply bg-rose-500/15 text-rose-300
+  border border-rose-500/30 rounded-lg px-3 py-1;
+}
+
+/* ======================================================
+   PROGRESS BARS
+   ====================================================== */
+.progress-bar {
+  @apply w-full h-4 bg-slate-700 rounded-full overflow-hidden;
+}
+
+.progress-bar-small {
+  @apply w-full h-3 bg-slate-700 rounded-full overflow-hidden;
+}
+
+.progress-excellent {
+  @apply bg-emerald-400;
+}
+
+.progress-good {
+  @apply bg-yellow-400;
+}
+
+.progress-improvement {
+  @apply bg-rose-400;
+}
+
+/* ======================================================
+   ICON CONTAINERS
+   ====================================================== */
+.icon-container {
+  @apply w-10 h-10 rounded-full flex items-center justify-center;
+}
+
+.icon-container-lg {
+  @apply w-12 h-12 rounded-full flex items-center justify-center;
+}
+
+.icon-container-xl {
+  @apply w-16 h-16 rounded-2xl flex items-center justify-center
+  border border-slate-600;
+}
+
+/* ======================================================
+   FEATURE CARDS
+   ====================================================== */
+.feature-card-green {
+  @apply bg-slate-800 rounded-2xl p-6 text-center
+  border border-emerald-500/30
+  transition hover:shadow-lg hover:shadow-emerald-500/10;
+}
+
+.feature-card-orange {
+  @apply bg-slate-800 rounded-2xl p-6 text-center
+  border border-orange-500/30
+  transition hover:shadow-lg hover:shadow-orange-500/10;
+}
+
+/* ======================================================
+   INFO BOXES
+   ====================================================== */
+.info-box-cyan {
+  @apply bg-cyan-500/10 rounded-xl p-4
+  border border-cyan-500/20;
+}
+
+.info-box-emerald {
+  @apply bg-emerald-500/10 rounded-xl p-4
+  border border-emerald-500/20;
+}
+
+.info-box-violet {
+  @apply bg-violet-500/10 rounded-xl p-4
+  border border-violet-500/20;
+}
+
+.info-box-blue {
+  @apply bg-blue-500/10 rounded-xl p-4
+  border border-blue-500/20;
+}
+
+/* ======================================================
+   KEYWORDS & LIST ITEMS
+   ====================================================== */
+.keyword-tag {
+  @apply px-3 py-1.5 rounded-lg text-sm font-medium
+  bg-slate-700/50 text-slate-200
+  border border-slate-600
+  transition hover:bg-slate-600;
+}
+
+.list-item-green {
+  @apply flex items-start gap-2 px-3 py-2 rounded-lg
+  bg-emerald-500/10 border border-emerald-500/20;
+}
+
+.list-item-orange {
+  @apply flex items-start gap-2 px-3 py-2 rounded-lg
+  bg-orange-500/10 border border-orange-500/20;
+}
+
+.list-item-cyan,
+.list-item-emerald {
+  @apply flex items-center gap-2 text-slate-200 text-sm;
+}
+
+/* ======================================================
+   LOADING SPINNER
+   ====================================================== */
+.loading-spinner {
+  @apply w-10 h-10 border-4 border-slate-600
+  border-t-sky-400 rounded-full animate-spin mx-auto;
 }
