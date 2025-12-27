@@ -138,7 +138,7 @@ function App() {
         {/* HEADER */}
         <div className="text-center mb-6">
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light bg-gradient-to-r from-cyan-300 via-teal-200 to-sky-300 bg-clip-text text-transparent mb-2">
-            Hopen the Poonny
+            AI Resume Analyzer
           </h1>
           <p className="text-slate-300">
             Upload your resume and get instant AI feedback
