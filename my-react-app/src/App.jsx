@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import * as pdfjsLib from "pdfjs-dist";
 import pdfjsWorker from "pdfjs-dist/build/pdf.worker.min?url";
 
-import constants, { buildPresenceChecklist } from "../constants";
+import constants, { buildPresenceChecklist, METRIC_CONFIG } from "../constants";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
@@ -125,6 +125,10 @@ function App() {
     setResumeText("");
     setPresenceChecklist([]);
   };
+  if (analysis) {
+    console.log("IMPROVEMENTS ARRAY:", analysis.improvements);
+  }
+
 
   /* -------------------- UI -------------------- */
   return (
@@ -223,14 +227,221 @@ function App() {
                   <span className="font-semibold text-lg">
                     {parseInt(analysis.overallScore) >= 8 ? "Excellent" : parseInt(analysis.overallScore) >= 6 ? "Good" : "Improvement Needed"}
                   </span>
-
                 </div>
-                <div></div>
+              </div>
+              <div className="progress-bar">
+                <div className={`h-full rounded-full transition-all duraton-1000 ease-out shadow-sm ${parseInt(analysis.overallScore) >= 8 ? "progress-excellent" : parseInt(analysis.overallScore) >= 6 ? "progress-good" : "progress-improvement"
+                  }`}
+                  style={{
+                    width: `${(parseInt(analysis.overallScore) / 10) * 100}%`
+                  }}></div>
+              </div>
+              <p className="text-slate-400 text-sm mt-3 text-center font-medium">
+                Score Based on Content quality,
+                formating , and keyword usage
+              </p>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="feature-card-green group">
+                <div className="bg-green-500/20 icon-container-lg mx-auto mb-3 group-hover:bg-green-400/30 transition-colors">
+                  <span className="text-green-300 text-xl">✓</span>
+                </div>
+                <h4 className="text-green-300 text-sm font-semibold uppercase tracking-wide mb-3">
+                  Top Strengths
+                </h4>
+                <div className="space-y-2 text-left">
+                  {analysis.strengths?.slice(0, 3).map((strength, index) => (
+                    <div key={index} className="list-item-orange text-green-400 text-sm mt-0.5">
+                      <span >*</span>
+                      <span className="text-slate-200 font-medium text-sm leading-relaxed">{strength}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="feature-card-orange group">
+                <div className="bg-orange-500/20 icon-container-lg mx-auto mb-3 group-hover:bg-orange-400/30 transition-colors">
+                  <span className="text-orange-300 text-xl">⚡</span>
+                </div>
+                <h4 className="text-orange-300 text-sm font-semibold uppercase tracking-wide mb-3">
+                  Main Improvement
+                </h4>
+                <div className="space-y-2 text-left">
+                  {analysis.improvements?.slice(0, 3).map((improvement, index) => (
+
+                    <div key={index} className="list-item-orange text-orange-400 text-sm mt-0.5">
+                      <span >*</span>
+                      <span className="text-slate-200 font-medium text-sm leading-relaxed">{improvement}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="section-card group">
+              <div className="flex items-center gap-3 mb-4" >
+                <div className="icon-container bg-purple-500/20">
+                  <span className="test-purple-300 text-lg">📋</span>
+                </div>
+                <h4 className="text-xl font-bold text-white">
+                  Executive Summary
+                </h4>
+              </div>
+              <div className="summary-box">
+                <p className="text-slate-200 text-sm sm:text-base leasing-relaxed">
+                  {analysis.summary}
+                </p>
+              </div>
+            </div>
+            <div className="section-card group">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="icon-container bg-cyan-500/20">
+                  <span className="text-cyan-300 text-lg">📊</span></div>
+                <h4 className="text-xl font-bold text-white">Performance Metrics</h4>
+              </div>
+              <div className="space-y-4">
+                {METRIC_CONFIG.map((cfg, i) => {
+                  const value = analysis.performanceMetrics?.[cfg.key] ?? cfg.defaultValue;
+                  return (
+                    <div key={i} className="group/item">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg">
+                            {cfg.icon}
+                          </span>
+                          <p className="text-slate-200 font-medium">{cfg.label}</p>
+                        </div>
+                        <span className="text-slate-300 font-bold">{value}/10</span>
+                      </div>
+                      <div className="progress-bar-small">
+                        <div
+                          className={`h-full bg-gradient-to-r ${cfg.colorClass}
+    rounded-full transition-all duration-1000 ease-out
+    group-hover/item:shadow-lg ${cfg.shadowClass}`}
+                          style={{ width: `${(value / 10) * 100}%` }}
+                        />
+                      </div>
+
+                    </div>
+                  )
+                })}
 
               </div>
             </div>
-          </div>
+            <div className="section-card group">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="icon-container bg-purple-500/20">
+                  <span className="text-lg text-purple-300">🔎</span>
+                </div>
+                <h2 className="text-xl font-bold text-purple-400">
+                  Resume Insights
+                </h2>
+              </div>
+              <div className="grid gap-4">
+                <div className="info-box-cyan group/item">
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="text-lg text-cyan-400">🎯</span>
+                    <h3 className="text-cyan-300 font-semibold">Action Items</h3>
+                  </div>
+                  <div className="space-y-2">
+                    {(analysis.actionItems || [
+                      "Optimize keyword placement for better ATS scoring",
+                      "Enhance content with quantifiable achievements",
+                      "Consider industry-specific terminology",
+                      "Use action verbs in bullet points",
+                    ]).map((item, index) => (
+                      <div className="list-item-cyan" key={index}>
+                        <span className="text-cyan-400">*</span>
+                        <span>{item}</span>
+                      </div>
+                    ))}
 
+                  </div>
+                </div>
+                <div className="info-box-emerald group/item">
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="text-lg">💡</span>
+                    <h3 className="text-emerald-300 font-semibold">Pro Tips</h3>
+                  </div>
+                  <div className="space-y-2">
+                    {(
+                      analysis.proTips || [
+                        "Use action verbs to start bullet points",
+                        "keep descriptions concise and impactful",
+                        "Tailor keywords to specific job descriptions",
+                      ]
+
+                    )
+                      .map((tip, index) => (
+                        <div key={index} className="list-item-emerald">
+                          <span className="text-emerald-400">*</span>
+                          <span>{tip}</span>
+
+                        </div>
+
+                      ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="section-card group">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="icon-container bg-violet-500/20">
+                  <span className="text-lg">🤖</span>
+                </div>
+                <h2 className="text-emerald-300 font-bold text-xl">ATS Optimizations</h2>
+
+              </div>
+              <div className="info-box-violet mb-4">
+                <div className="flex items-start gap-3 mb-3">
+                  <div>
+                    <h3 className="text-violet-300 font-semibold mb-2">What is ATS?</h3>
+                    <p className="text-slate-200 text-sm leading-relaxed">ATS (Applicant Tracking System) is software used by companies to manage job applications.
+                      It automatically scans resumes for keywords, skills, and experience.
+                      ATS helps recruiters filter and rank candidates before human review.
+                      Optimizing resumes for ATS increases the chance of getting shortlisted.</p>
+                  </div>
+                </div>
+              </div>
+              <div className="info-box-violet">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-lg">🤖</span>
+                </div>
+                <h3 className=" text-violet-300 font-semibold text-lg">ATS Compatibility Checklist</h3>
+
+              </div>
+              <div className="space-y-2">
+                {(presenceChecklist || []).map((item, index) => (
+                  <div key={index} className="flex items-start gap-2 text-slate-200">
+
+                    <span className={`${item.present ? "text-emerald-400" : "text-red-400"}`}>
+                      {item.present ? "✅" : "❌"}
+                    </span>
+                    <span>{item.label}</span>
+
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="section-card group">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="icon-container bg-violet-500/20">
+                  <span className="text-lg">🔑</span>
+                </div>
+                <h2 className="text-blue-400 font-bold text-xl">Recommend Keywords</h2>
+
+              </div>
+              <div className="flex flex-wrap gap-3 mb-4">
+                {analysis.keywords.map((k, i) => (
+                  <sapn key={i} className="keyword-tag group/item">{k}</sapn>
+                ))}
+              </div>
+              <div className="info-box-blue">
+                <p className="text-slate-300 yexy-sm leading-relaxed item-start gap-2">
+                  <span className="text-lg mt-0.5">💡</span>
+                  Consider incorporating these keywords naturally into your resume. to improve ATS compatibility and increase your chances of getting shortlisted.
+                </p>
+              </div>
+            </div>
+          </div>
 
         )}
       </div>
